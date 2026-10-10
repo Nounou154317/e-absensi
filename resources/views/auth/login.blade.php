@@ -15,10 +15,8 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            /* Background gedung sekolah */
-            background-image:
-                url('{{ asset("img/Sekolah.jpg") }}'),
-                url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&q=80');
+            /* Background gedung sekolah diselesaikan dengan 1 URL asset */
+            background-image: url('{{ asset("img/Sekolah.jpg") }}');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -173,7 +171,7 @@
             border-left: 3px solid #ef4444;
         }
 
-        /* ============ DEMO HINT (opsional) ============ */
+        /* ============ DEMO HINT ============ */
         .demo-hint {
             text-align: center;
             margin-top: 22px;

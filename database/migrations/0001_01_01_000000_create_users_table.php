@@ -17,6 +17,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            
+            // Tambahkan semua atribut user di sini
+            $table->string('role')->default('siswa'); // Tipe string kompatibel dengan PostgreSQL & role orang_tua
+            $table->string('nis')->nullable()->unique();
+            $table->string('kelas')->nullable();
+            $table->string('mata_pelajaran')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });
