@@ -15,8 +15,8 @@
             "dest": "/public/build/$1"
         },
         {
-            "src": "/(css|js|images|fonts)/(.*)",
-            "dest": "/public/$2"
+            "src": "/(css|js|img|images|fonts)/(.*)",
+            "dest": "/public/$1/$2"
         },
         {
             "src": "/(.*)",
