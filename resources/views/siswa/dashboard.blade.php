@@ -135,9 +135,9 @@
                         {{-- Foto Masuk --}}
                         <td>
                             @if($r->foto_masuk)
-                                <img src="{{ asset('storage/' . $r->foto_masuk) }}"
+                                <img src="{{ $r->foto_masuk }}"
                                      class="foto-absen" alt="Foto masuk" loading="lazy"
-                                     onclick="showFoto('{{ asset('storage/' . $r->foto_masuk) }}', 'masuk', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_masuk }}')">
+                                     onclick="showFoto('{{ $r->foto_masuk }}', 'masuk', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_masuk }}')">
                             @else
                                 <span class="text-muted">-</span>
                             @endif
@@ -146,9 +146,9 @@
                         {{-- Foto Pulang --}}
                         <td>
                             @if($r->foto_pulang)
-                                <img src="{{ asset('storage/' . $r->foto_pulang) }}"
+                                <img src="{{ $r->foto_pulang }}"
                                      class="foto-absen" alt="Foto pulang" loading="lazy"
-                                     onclick="showFoto('{{ asset('storage/' . $r->foto_pulang) }}', 'pulang', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_pulang }}')">
+                                     onclick="showFoto('{{ $r->foto_pulang }}', 'pulang', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_pulang }}')">
                             @else
                                 <span class="text-muted">-</span>
                             @endif
