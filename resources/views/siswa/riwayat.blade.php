@@ -100,20 +100,20 @@
                 <td>{{ $r->jam_pulang ? substr($r->jam_pulang, 0, 5) : '-' }}</td>
                 <td>
                     @if($r->foto_masuk)
-                        <img src="{{ asset('storage/' . $r->foto_masuk) }}"
-                             class="foto-absen" alt="Foto masuk"
-                             onclick="showFoto('{{ asset('storage/' . $r->foto_masuk) }}', 'masuk', '{{ \Carbon\Carbon::parse($r->tanggal)->format('d/m/Y') }}', '{{ $r->jam_masuk }}')">
+                        <img src="{{ $r->foto_masuk }}"
+                            class="foto-absen" alt="Foto masuk" loading="lazy"
+                            onclick="showFoto('{{ $r->foto_masuk }}', 'masuk', '{{ \Carbon\Carbon::parse($r->tanggal)->format('d/m/Y') }}', '{{ $r->jam_masuk }}')">
                     @else
-                        <span style="color: #94a3b8;">-</span>
+                        <span class="text-muted">-</span>
                     @endif
                 </td>
                 <td>
                     @if($r->foto_pulang)
-                        <img src="{{ asset('storage/' . $r->foto_pulang) }}"
-                             class="foto-absen" alt="Foto pulang"
-                             onclick="showFoto('{{ asset('storage/' . $r->foto_pulang) }}', 'pulang', '{{ \Carbon\Carbon::parse($r->tanggal)->format('d/m/Y') }}', '{{ $r->jam_pulang }}')">
+                        <img src="{{ $r->foto_pulang }}"
+                            class="foto-absen" alt="Foto pulang" loading="lazy"
+                            onclick="showFoto('{{ $r->foto_pulang }}', 'pulang', '{{ \Carbon\Carbon::parse($r->tanggal)->format('d/m/Y') }}', '{{ $r->jam_pulang }}')">
                     @else
-                        <span style="color: #94a3b8;">-</span>
+                        <span class="text-muted">-</span>
                     @endif
                 </td>
                 <td>
