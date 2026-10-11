@@ -200,19 +200,13 @@ class SiswaController extends Controller
     /**
      * Helper untuk menyimpan gambar dari format Base64.
      */
-    private function saveBase64(string $base64String, string $folder): ?string
+   private function saveBase64(string $base64String, string $folder): ?string
     {
-        $image = preg_replace('/^data:image\/\w+;base64,/', '', $base64String);
-        $image = str_replace(' ', '+', $image);
-        $decodedImage = base64_decode($image);
-
-        if ($decodedImage === false) {
+        if (empty($base64String)) {
             return null;
         }
 
-        $imageName = $folder . '/' . uniqid() . '.png';
-        Storage::disk('public')->put($imageName, $decodedImage);
-
-        return $imageName;
+        // Kembalikan string base64 utuh untuk disimpan di DB
+        return $base64String;
     }
 }   
