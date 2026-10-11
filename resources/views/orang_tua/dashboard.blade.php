@@ -153,7 +153,7 @@
                     <td>{{ $r->jam_masuk ? substr($r->jam_masuk, 0, 5) : '-' }}</td>
                     <td>{{ $r->jam_pulang ? substr($r->jam_pulang, 0, 5) : '-' }}</td>
                     
-                    {{-- PERBAIKAN FOTO MASUK: Tanpa asset('storage/...') --}}
+                    {{-- Foto Masuk --}}
                     <td>
                         @if($r->foto_masuk)
                             <img src="{{ $r->foto_masuk }}" class="foto-absen" alt="Foto masuk" loading="lazy"
@@ -163,7 +163,7 @@
                         @endif
                     </td>
 
-                    {{-- PERBAIKAN FOTO PULANG: Tanpa asset('storage/...') --}}
+                    {{-- Foto Pulang --}}
                     <td>
                         @if($r->foto_pulang)
                             <img src="{{ $r->foto_pulang }}" class="foto-absen" alt="Foto pulang" loading="lazy"
@@ -215,7 +215,7 @@
                     <th>Status</th>
                     <th>Catatan Verifikasi</th>
                     <th>Bukti</th>
-                    <th></th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -246,8 +246,9 @@
                         @if($p->status === 'menunggu')
                         <form action="{{ route('orang_tua.izin.batal', $p) }}" method="POST"
                               onsubmit="return confirm('Batalkan pengajuan ini?')">
-                            @csrf @method('DELETE')
-                            <button class="btn-x sm danger">Batalkan</button>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-x sm danger">Batalkan</button>
                         </form>
                         @endif
                     </td>
