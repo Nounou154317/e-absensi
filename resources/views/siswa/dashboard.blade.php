@@ -229,7 +229,7 @@
             </div>
             <div class="modal-body pt-0">
                 <video id="videoMasuk" autoplay playsinline></video>
-                <canvas id="canvasMasuk"></canvas>
+                <canvas id="canvasMasuk" style="display:none;"></canvas>
                 <img id="previewMasuk">
             </div>
             <div class="modal-footer border-0 justify-content-center">
@@ -251,7 +251,7 @@
             </div>
             <div class="modal-body pt-0">
                 <video id="videoPulang" autoplay playsinline></video>
-                <canvas id="canvasPulang"></canvas>
+                <canvas id="canvasPulang" style="display:none;"></canvas>
                 <img id="previewPulang">
             </div>
             <div class="modal-footer border-0 justify-content-center">
@@ -318,9 +318,9 @@ function showFoto(src, tipe, tanggal, jam) {
 }
 
 function initCamera(cfg) {
-    const video   = document.getElementById(cfg.video);
-    const canvas  = document.getElementById(cfg.canvas);
-    const preview = document.getElementById(cfg.preview);
+    const video    = document.getElementById(cfg.video);
+    const canvas   = document.getElementById(cfg.canvas);
+    const preview  = document.getElementById(cfg.preview);
     const btnAmbil = document.getElementById(cfg.btnAmbil);
     const btnKirim = document.getElementById(cfg.btnKirim);
     let stream = null, fotoData = null;
@@ -345,10 +345,21 @@ function initCamera(cfg) {
     });
 
     btnAmbil.addEventListener('click', () => {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0);
-        fotoData = canvas.toDataURL('image/png');
+        // Kompresi resolusi gambar kamera ke max lebar 400px
+        const maxWidth = 400;
+        const scale = maxWidth / (video.videoWidth || 640);
+        const width = maxWidth;
+        const height = (video.videoHeight || 480) * scale;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, width, height);
+
+        // Kompres ke JPEG dengan kualitas 60% (0.6) agar payload sangat ringan
+        fotoData = canvas.toDataURL('image/jpeg', 0.6);
+
         preview.src = fotoData;
         preview.style.transform = 'scaleX(-1)';
         preview.style.display = 'block';
@@ -360,7 +371,8 @@ function initCamera(cfg) {
     btnKirim.addEventListener('click', () => {
         if (!fotoData) return;
         btnKirim.disabled = true;
-        btnKirim.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+        btnKirim.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Mengirim...';
+        
         fetch(cfg.endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf },
@@ -370,12 +382,17 @@ function initCamera(cfg) {
         .then(res => {
             if (res.success) {
                 showToast(res.message, 'success', 'Berhasil');
-                setTimeout(() => location.reload(), 1000);
+                setTimeout(() => location.reload(), 800);
             } else {
                 showToast(res.message, 'danger', 'Gagal');
                 btnKirim.disabled = false;
                 btnKirim.innerHTML = '<i class="bi bi-send"></i> Kirim';
             }
+        })
+        .catch(err => {
+            showToast('Terjadi kesalahan koneksi', 'danger', 'Gagal');
+            btnKirim.disabled = false;
+            btnKirim.innerHTML = '<i class="bi bi-send"></i> Kirim';
         });
     });
 }
