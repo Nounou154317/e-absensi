@@ -2,14 +2,17 @@
 
 use App\Http\Controllers\Admin\MapelController;
 use App\Http\Controllers\Admin\PenugasanGuruController;
+
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BerkasController;
 use App\Http\Controllers\GuruController;
-use App\Http\Controllers\Guru\PengajuanController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\OrangTuaController;
 use App\Http\Controllers\SiswaController;
+
+use App\Http\Controllers\Guru\PengajuanController;
+
 use Illuminate\Support\Facades\Route;
 
 // ===== AUTH =====
