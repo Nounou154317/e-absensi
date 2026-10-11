@@ -80,8 +80,15 @@
 
             <div class="col-lg-5">
                 <div style="color: #64748b; font-size: 12px; margin-bottom: 6px;">Foto bukti</div>
-                <img src="{{ route('berkas.pengajuan', [$p, 'foto']) }}" alt="Foto bukti" class="foto-bukti"
-                     onclick="lihatBukti(this.src)">
+                @if($p->foto_bukti)
+                    @if(str_starts_with($p->foto_bukti, 'data:'))
+                        <img src="{{ $p->foto_bukti }}" alt="Foto bukti" class="foto-bukti" onclick="lihatBukti(this.src)">
+                    @else
+                        <img src="{{ route('berkas.pengajuan', [$p, 'foto']) }}" alt="Foto bukti" class="foto-bukti" onclick="lihatBukti(this.src)">
+                    @endif
+                @else
+                    <span style="font-size: 12px; color: #94a3b8;">Tidak ada foto bukti</span>
+                @endif
 
                 <div style="color: #64748b; font-size: 12px; margin: 12px 0 6px;">Surat dokter</div>
                 @if($p->surat_dokter)
