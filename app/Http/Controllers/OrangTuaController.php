@@ -113,7 +113,7 @@ class OrangTuaController extends Controller
         foreach ($perBulan as $k => $row) {
             $tercatat = $row['hadir'] + $row['izin'] + $row['sakit'] + $row['alpha'];
             $perBulan[$k]['tercatat'] = $tercatat;
-            $perBulan[$k]['persen']   = $tercatat > 0 ? round($row['hadir'] / $tercatat * 100, 1) : null;
+            $perBulan[$k]['persen']   = $tercatat > 0 ? round(($row['hadir'] / $tercatat) * 100, 1) : null;
         }
         $ringkasanBulan = $perBulan[$bulan];
 
@@ -217,20 +217,20 @@ class OrangTuaController extends Controller
             'foto_bukti'      => 'required|file|mimes:jpg,jpeg,png|max:5120',
             'surat_dokter'    => 'required_if:jenis,sakit|nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
         ], [
-            'tanggal_mulai.required'   => 'Tanggal ketidakhadiran wajib diisi.',
+            'tanggal_mulai.required'         => 'Tanggal ketidakhadiran wajib diisi.',
             'tanggal_selesai.after_or_equal' => 'Tanggal selesai tidak boleh sebelum tanggal mulai.',
-            'jenis.required'           => 'Pilih jenis ketidakhadiran (izin atau sakit).',
-            'alasan.required'          => 'Alasan wajib diisi.',
-            'alasan.min'               => 'Alasan minimal 10 karakter agar jelas bagi guru.',
-            'foto_bukti.required'      => 'Foto bukti wajib dilampirkan.',
-            'foto_bukti.mimes'         => 'Foto bukti harus berformat JPG, JPEG, atau PNG.',
-            'foto_bukti.max'           => 'Ukuran foto bukti maksimal 5 MB.',
-            'surat_dokter.required_if' => 'Surat dokter wajib dilampirkan untuk pengajuan sakit.',
-            'surat_dokter.mimes'       => 'Surat dokter harus berformat JPG, JPEG, PNG, atau PDF.',
-            'surat_dokter.max'         => 'Ukuran surat dokter maksimal 5 MB.',
+            'jenis.required'                 => 'Pilih jenis ketidakhadiran (izin atau sakit).',
+            'alasan.required'                => 'Alasan wajib diisi.',
+            'alasan.min'                     => 'Alasan minimal 10 karakter agar jelas bagi guru.',
+            'foto_bukti.required'            => 'Foto bukti wajib dilampirkan.',
+            'foto_bukti.mimes'               => 'Foto bukti harus berformat JPG, JPEG, atau PNG.',
+            'foto_bukti.max'                 => 'Ukuran foto bukti maksimal 5 MB.',
+            'surat_dokter.required_if'       => 'Surat dokter wajib dilampirkan untuk pengajuan sakit.',
+            'surat_dokter.mimes'             => 'Surat dokter harus berformat JPG, JPEG, PNG, atau PDF.',
+            'surat_dokter.max'               => 'Ukuran surat dokter maksimal 5 MB.',
         ]);
 
-        // Hanya boleh untuk anak yang terhubung dengan akun ini (selain itu → 404)
+        // Hanya boleh untuk anak yang terhubung dengan akun ini
         $anak = auth()->user()->anak()->findOrFail($request->siswa_id);
 
         $hariIni = Carbon::today();
@@ -273,11 +273,15 @@ class OrangTuaController extends Controller
             return $this->gagal('tanggal_mulai', 'Anak sudah tercatat absen masuk pada: ' . $daftar . '.');
         }
 
-        // Berkas disimpan di disk PRIVATE (tidak bisa diakses lewat URL publik)
-        $foto  = $request->file('foto_bukti')->store('pengajuan/' . $anak->id, 'local');
-        $surat = $request->hasFile('surat_dokter')
-                    ? $request->file('surat_dokter')->store('pengajuan/' . $anak->id, 'local')
-                    : null;
+        // PERBAIKAN UTAMA: SIMPAN BERKAS SEBAGAI BASE64
+        $fotoFile   = $request->file('foto_bukti');
+        $fotoBase64 = 'data:' . $fotoFile->getMimeType() . ';base64,' . base64_encode(file_get_contents($fotoFile->getRealPath()));
+
+        $suratBase64 = null;
+        if ($request->hasFile('surat_dokter')) {
+            $suratFile   = $request->file('surat_dokter');
+            $suratBase64 = 'data:' . $suratFile->getMimeType() . ';base64,' . base64_encode(file_get_contents($suratFile->getRealPath()));
+        }
 
         PengajuanIzin::create([
             'siswa_id'        => $anak->id,
@@ -286,8 +290,8 @@ class OrangTuaController extends Controller
             'tanggal_selesai' => $selesai->toDateString(),
             'jenis'           => $request->jenis,
             'alasan'          => $request->alasan,
-            'foto_bukti'      => $foto,
-            'surat_dokter'    => $surat,
+            'foto_bukti'      => $fotoBase64,
+            'surat_dokter'    => $suratBase64,
             'status'          => 'menunggu',
         ]);
 
@@ -306,9 +310,6 @@ class OrangTuaController extends Controller
             return back()->with('error', 'Pengajuan yang sudah diverifikasi tidak dapat dibatalkan.');
         }
 
-        foreach ([$pengajuan->foto_bukti, $pengajuan->surat_dokter] as $berkas) {
-            if ($berkas) Storage::disk('local')->delete($berkas);
-        }
         $pengajuan->delete();
 
         return back()->with('success', 'Pengajuan dibatalkan.');
@@ -318,7 +319,6 @@ class OrangTuaController extends Controller
     //  HELPER
     // =====================================================
 
-    /** Anak yang sedang dipilih (disimpan di session; selalu dicek milik akun ini) */
     private function anakTerpilih(Request $request): array
     {
         $anakList = auth()->user()->anak()->orderBy('nama')->get();
