@@ -49,7 +49,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('mapel', MapelController::class)->except(['show']);
 
     // Penugasan Guru ↔ Mata Pelajaran ↔ Kelas
-    Route::get('/admin/penugasan-guru', [PenugasanGuruController::class, 'index'])->name('penugasan.index');
+    Route::get('/penugasan-guru', [PenugasanGuruController::class, 'index'])->name('penugasan.index');
     Route::get('/penugasan-guru/{guru}/edit', [PenugasanGuruController::class, 'edit'])->name('penugasan.edit');
     Route::put('/penugasan-guru/{guru}', [PenugasanGuruController::class, 'update'])->name('penugasan.update');
 
