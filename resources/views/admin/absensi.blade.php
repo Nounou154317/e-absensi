@@ -136,10 +136,7 @@
                     </td>
                     <td class="text-center">
                         @if($a->foto_masuk)
-                            <img src="{{ asset('storage/'.$a->foto_masuk) }}"
-                                 class="foto-absen"
-                                 onclick="showFoto('{{ asset('storage/'.$a->foto_masuk) }}', '{{ $a->siswa->nama }}', 'masuk', '{{ $a->jam_masuk }}')">
-                        @else
+                            <img src="{{ $a->foto_masuk }}" alt="Foto Masuk" class="w-12 h-12 object-cover rounded-lg">
                             <span style="color: #cbd5e1;">-</span>
                         @endif
                     </td>

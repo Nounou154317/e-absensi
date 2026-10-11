@@ -166,11 +166,13 @@
                             <span style="color: #cbd5e1;">-</span>
                         @endif
                     </td>
+                    {{-- PERBAIKAN: Panggil $a->foto_masuk secara langsung tanpa asset('storage/...') --}}
                     <td class="text-center">
                         @if($a->foto_masuk)
-                            <img src="{{ asset('storage/'.$a->foto_masuk) }}"
+                            <img src="{{ $a->foto_masuk }}"
                                  class="foto-absen"
-                                 onclick="showFoto('{{ asset('storage/'.$a->foto_masuk) }}', '{{ $a->siswa->nama }}', '{{ $a->jam_masuk }}')">
+                                 alt="Foto Absen"
+                                 onclick="showFoto('{{ $a->foto_masuk }}', '{{ $a->siswa->nama ?? 'Siswa' }}', '{{ $a->jam_masuk }}')">
                         @else
                             <span style="color: #cbd5e1;">-</span>
                         @endif

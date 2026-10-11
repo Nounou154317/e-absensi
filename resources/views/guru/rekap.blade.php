@@ -117,16 +117,18 @@
         <table class="table-rekap">
             <thead>
                 <tr>
-                    <th style="width: 50px;">No</th>
+                    <th style="width: 40px;">No</th>
                     <th>Tanggal</th>
                     <th>NIS</th>
                     <th>Nama</th>
                     <th>Kelas</th>
                     <th class="text-center">Masuk</th>
+                    <th class="text-center">Foto Masuk</th>
                     <th class="text-center">Pulang</th>
+                    <th class="text-center">Foto Pulang</th>
                     <th class="text-center">Status</th>
                     <th>Keterangan</th>
-                    <th class="text-center" style="width: 90px;">Aksi</th>
+                    <th class="text-center" style="width: 70px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -164,11 +166,27 @@
                             <span style="color: #cbd5e1;">-</span>
                         @endif
                     </td>
+                    {{-- FOTO MASUK --}}
+                    <td class="text-center">
+                        @if($a->foto_masuk)
+                            <img src="{{ $a->foto_masuk }}" alt="Foto Masuk" class="rounded border" style="width: 42px; height: 42px; object-fit: cover;">
+                        @else
+                            <span style="color: #cbd5e1;">-</span>
+                        @endif
+                    </td>
                     <td class="text-center">
                         @if($a->jam_pulang)
                             <span style="font-weight: 600; color: #10b981;">
                                 {{ substr($a->jam_pulang, 0, 5) }}
                             </span>
+                        @else
+                            <span style="color: #cbd5e1;">-</span>
+                        @endif
+                    </td>
+                    {{-- FOTO PULANG --}}
+                    <td class="text-center">
+                        @if($a->foto_pulang)
+                            <img src="{{ $a->foto_pulang }}" alt="Foto Pulang" class="rounded border" style="width: 42px; height: 42px; object-fit: cover;">
                         @else
                             <span style="color: #cbd5e1;">-</span>
                         @endif
@@ -249,7 +267,7 @@
                 </div>
                 @empty
                 <tr>
-                    <td colspan="10" style="text-align: center; padding: 50px; color: #94a3b8;">
+                    <td colspan="12" style="text-align: center; padding: 50px; color: #94a3b8;">
                         <i class="bi bi-inbox" style="font-size: 40px; display: block; margin-bottom: 10px; opacity: .5;"></i>
                         Belum ada data absensi
                     </td>
