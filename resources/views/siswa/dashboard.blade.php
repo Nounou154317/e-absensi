@@ -345,8 +345,8 @@ function initCamera(cfg) {
     });
 
     btnAmbil.addEventListener('click', () => {
-        // Kompresi resolusi gambar kamera ke max lebar 400px
-        const maxWidth = 400;
+        // Atur resolusi maksimal 300px agar payload sangat kecil (<100KB)
+        const maxWidth = 300;
         const scale = maxWidth / (video.videoWidth || 640);
         const width = maxWidth;
         const height = (video.videoHeight || 480) * scale;
@@ -357,8 +357,8 @@ function initCamera(cfg) {
         const ctx = canvas.getContext('2d');
         ctx.drawImage(video, 0, 0, width, height);
 
-        // Kompres ke JPEG dengan kualitas 60% (0.6) agar payload sangat ringan
-        fotoData = canvas.toDataURL('image/jpeg', 0.6);
+        // Compress ke JPEG dengan kualitas 50%
+        fotoData = canvas.toDataURL('image/jpeg', 0.5);
 
         preview.src = fotoData;
         preview.style.transform = 'scaleX(-1)';
