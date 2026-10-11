@@ -11,7 +11,9 @@
 <div class="welcome-banner">
     <div>
         <h4>Halo, {{ auth()->user()->name }}</h4>
-        <div class="meta">Orang tua dari <strong>{{ $anak->nama }}</strong> • Kelas {{ $anak->kelas }}</div>
+        <div class="meta">
+            Orang tua dari <strong>{{ $anak->nama }}</strong> • Kelas {{ $anak->kelas }}
+        </div>
         <span class="badge-tahun">Tahun ajaran {{ $tahunAjaran }}</span>
     </div>
     <div class="banner-right">
@@ -150,22 +152,27 @@
                     <td>{{ $tgl->translatedFormat('l') }}</td>
                     <td>{{ $r->jam_masuk ? substr($r->jam_masuk, 0, 5) : '-' }}</td>
                     <td>{{ $r->jam_pulang ? substr($r->jam_pulang, 0, 5) : '-' }}</td>
+                    
+                    {{-- PERBAIKAN FOTO MASUK: Tanpa asset('storage/...') --}}
                     <td>
                         @if($r->foto_masuk)
-                            <img src="{{ asset('storage/' . $r->foto_masuk) }}" class="foto-absen" alt="Foto masuk" loading="lazy"
-                                 onclick="showFoto('{{ asset('storage/' . $r->foto_masuk) }}', 'masuk', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_masuk }}')">
+                            <img src="{{ $r->foto_masuk }}" class="foto-absen" alt="Foto masuk" loading="lazy"
+                                 onclick="showFoto('{{ $r->foto_masuk }}', 'masuk', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_masuk }}')">
                         @else
                             <span style="color: #94a3b8;">-</span>
                         @endif
                     </td>
+
+                    {{-- PERBAIKAN FOTO PULANG: Tanpa asset('storage/...') --}}
                     <td>
                         @if($r->foto_pulang)
-                            <img src="{{ asset('storage/' . $r->foto_pulang) }}" class="foto-absen" alt="Foto pulang" loading="lazy"
-                                 onclick="showFoto('{{ asset('storage/' . $r->foto_pulang) }}', 'pulang', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_pulang }}')">
+                            <img src="{{ $r->foto_pulang }}" class="foto-absen" alt="Foto pulang" loading="lazy"
+                                 onclick="showFoto('{{ $r->foto_pulang }}', 'pulang', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_pulang }}')">
                         @else
                             <span style="color: #94a3b8;">-</span>
                         @endif
                     </td>
+
                     <td><span class="badge-status status-{{ $statusKey }}">{{ $statusText }}</span></td>
                     <td style="max-width: 260px; font-size: 12px; color: #475569;">
                         @if($isTerlambat)
