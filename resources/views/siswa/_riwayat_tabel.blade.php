@@ -28,24 +28,29 @@
                 <td>{{ $tgl->translatedFormat('l') }}</td>
                 <td>{{ $r->jam_masuk ? substr($r->jam_masuk, 0, 5) : '-' }}</td>
                 <td>{{ $r->jam_pulang ? substr($r->jam_pulang, 0, 5) : '-' }}</td>
+                
+                {{-- Foto Masuk --}}
                 <td>
                     @if($r->foto_masuk)
-                        <img src="{{ asset('storage/' . $r->foto_masuk) }}"
+                        <img src="{{ $r->foto_masuk }}"
                              class="foto-absen" alt="Foto masuk" loading="lazy"
-                             onclick="showFoto('{{ asset('storage/' . $r->foto_masuk) }}', 'masuk', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_masuk }}')">
+                             onclick="showFoto('{{ $r->foto_masuk }}', 'masuk', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_masuk }}')">
                     @else
                         <span style="color: #94a3b8;">-</span>
                     @endif
                 </td>
+
+                {{-- Foto Pulang --}}
                 <td>
                     @if($r->foto_pulang)
-                        <img src="{{ asset('storage/' . $r->foto_pulang) }}"
+                        <img src="{{ $r->foto_pulang }}"
                              class="foto-absen" alt="Foto pulang" loading="lazy"
-                             onclick="showFoto('{{ asset('storage/' . $r->foto_pulang) }}', 'pulang', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_pulang }}')">
+                             onclick="showFoto('{{ $r->foto_pulang }}', 'pulang', '{{ $tgl->format('d/m/Y') }}', '{{ $r->jam_pulang }}')">
                     @else
                         <span style="color: #94a3b8;">-</span>
                     @endif
                 </td>
+                
                 <td><span class="badge-status {{ $statusClass }}">{{ $statusText }}</span></td>
                 <td>
                     @if($isTerlambat)
